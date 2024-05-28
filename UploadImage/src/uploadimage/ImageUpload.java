@@ -12,19 +12,33 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+
 
 /**
  *
  * @author WIN11
  */
 public class ImageUpload extends javax.swing.JFrame {
+    protected static final int GAP = 5;
 File f;
 String path;
 private ImageIcon format;
 String name;
 int s = 0;
 byte[] pimage;
+
+
+
+
     /**
      * Creates new form ImageUpload
      */
@@ -56,9 +70,9 @@ byte[] pimage;
     private void initComponents() {
 
         labelImage = new javax.swing.JLabel();
-        imagePath = new javax.swing.JTextField();
         btnBrowse = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
+        imagePath = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -79,29 +93,29 @@ byte[] pimage;
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(imagePath)
-                    .addComponent(labelImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
+                    .addComponent(labelImage, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 221, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 472, Short.MAX_VALUE)
                         .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(261, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(imagePath, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(labelImage, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
+                .addComponent(imagePath, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(labelImage, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnBrowse, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(105, 105, 105))
+                .addContainerGap())
         );
 
         pack();
@@ -109,24 +123,50 @@ byte[] pimage;
 
     private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
         // TODO add your handling code here:
-        
-        JFileChooser fileChooser = new JFileChooser();
-        FileNameExtensionFilter fnef = new FileNameExtensionFilter("PNG JPG JPEG", "png","jpg","jpeg");
-        fileChooser.addChoosableFileFilter(fnef);
-        int load = fileChooser.showOpenDialog(null);
-        
-        if(load == fileChooser.APPROVE_OPTION){
-            f = fileChooser.getSelectedFile();
-            
-            path = f.getAbsolutePath();
-            
-            imagePath.setText(path);
-            ImageIcon Ii = new ImageIcon();
-            Image img = Ii.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
-            labelImage.setIcon(new ImageIcon(img));
-        }
+        chooseImage();
     }//GEN-LAST:event_btnBrowseActionPerformed
 
+    
+    private void chooseImage() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+            @Override
+            public boolean accept(File f) {
+                if (f.isDirectory()) {
+                    return true;
+                } else {
+                    String filename = f.getName().toLowerCase();
+                    return filename.endsWith(".jpg") || filename.endsWith(".jpeg") || filename.endsWith(".png") || filename.endsWith(".gif");
+                }
+            }
+
+            @Override
+            public String getDescription() {
+                return "Image Files (*.jpg, *.jpeg, *.png, *.gif)";
+            }
+        });
+
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            f = fileChooser.getSelectedFile();
+            imagePath.setHorizontalAlignment(JLabel.CENTER);
+            imagePath.setEditable(false);
+            imagePath.setText(f.getAbsolutePath());
+            
+            displayImage(f);
+        }
+    }
+    
+    private void displayImage(File file) {
+        try {
+            ImageIcon icon = new ImageIcon(file.getAbsolutePath());
+            Image img = icon.getImage();
+            Image newImg = img.getScaledInstance(labelImage.getWidth(), labelImage.getHeight(), Image.SCALE_SMOOTH);
+            labelImage.setIcon(new ImageIcon(newImg));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
     /**
      * @param args the command line arguments
      */
@@ -162,6 +202,7 @@ byte[] pimage;
         });
     }
 
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBrowse;
     private javax.swing.JButton btnSave;
@@ -169,3 +210,4 @@ byte[] pimage;
     private javax.swing.JLabel labelImage;
     // End of variables declaration//GEN-END:variables
 }
+

@@ -4,9 +4,11 @@
  */
 package data.mahasiswa;
 
+import javax.swing.JLabel;
+
 public class Mahasiswa {
     int id;
-    String npm, nama, jenis_kelamin, jurusan, kelas;
+    String npm, nama, jenis_kelamin, jurusan, kelas, image, imagePath;
     
     public int getid() {
         return id;
@@ -55,5 +57,23 @@ public class Mahasiswa {
     public void setKelas(String kelas) {
         this.kelas = kelas;
     }
+    
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String kelas) {
+        this.image = image;
+    }
+    
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String kelas) {
+        this.imagePath = imagePath;
+    }
+
+    
     
 }

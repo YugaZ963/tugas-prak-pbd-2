@@ -22,13 +22,16 @@ public class UploadImage2 extends JFrame{
 
     public UploadImage2() {
         setTitle("Image Uploader");
-        setSize(400, 300);
+        setSize(800, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
         labelImage = new JLabel();
         labelImage.setHorizontalAlignment(JLabel.CENTER);
-        textFieldPath = new JTextField(20);
+        labelImage.setPreferredSize(new Dimension(400, 300));
+        labelImage.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+        textFieldPath = new JTextField(30);
         textFieldPath.setEditable(false);
         buttonBrowse = new JButton("Browse");
         buttonSave = new JButton("Save");
@@ -87,7 +90,18 @@ public class UploadImage2 extends JFrame{
         if (result == JFileChooser.APPROVE_OPTION) {
             selectedFile = fileChooser.getSelectedFile();
             textFieldPath.setText(selectedFile.getAbsolutePath());
-            labelImage.setIcon(new ImageIcon(selectedFile.getAbsolutePath()));
+            displayImage(selectedFile);
+        }
+    }
+
+    private void displayImage(File file) {
+        try {
+            ImageIcon icon = new ImageIcon(file.getAbsolutePath());
+            Image img = icon.getImage();
+            Image newImg = img.getScaledInstance(labelImage.getWidth(), labelImage.getHeight(), Image.SCALE_SMOOTH);
+            labelImage.setIcon(new ImageIcon(newImg));
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
