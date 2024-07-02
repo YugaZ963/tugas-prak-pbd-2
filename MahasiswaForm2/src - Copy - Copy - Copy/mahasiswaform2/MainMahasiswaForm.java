@@ -1,0 +1,749 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package mahasiswaform2;
+
+import java.awt.Image;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.sql.*;
+import javax.swing.table.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+/**
+ *
+ * @author WIN11
+ */
+public class MainMahasiswaForm extends javax.swing.JFrame {
+
+    
+    Connection con;
+    ResultSet rs;
+    PreparedStatement pst;
+    private File selectedFile;
+    private TableModel tb;
+    byte[] user_image;
+//    private JTable jTable1;
+    
+    
+    /**
+     * Creates new form MainMahasiswaForm
+     */
+    public MainMahasiswaForm() {
+        initComponents();
+//        
+//        tableModel = new DefaultTableModel(new String[] { "Nama", "NPM", "Jenis Kelamin", "Prodi", "Kelas", "Foto" }, 0);
+//        jTable1 = new JTable(tableModel) {
+//            @Override
+//            public Class<?> getColumnClass(int column) {
+//                return column == 5 ? ImageIcon.class : String.class;
+//            }
+//        };
+//        jTable1.setRowHeight(100);
+//
+//        JScrollPane scrollPane = new JScrollPane(jTable1);
+//        scrollPane.setBounds(350, 20, 400, 350);
+//        add(scrollPane);
+
+        
+        tabel();
+//        loadData();
+    }
+        private void tabel()  {
+            
+//        jTable1 = new JTable(tb) {
+//            @Override
+//            public Class<?> getColumnClass(int column) {
+//                return column == 5 ? ImageIcon.class : String.class;
+//            }
+//        };
+//        jTable1.setRowHeight(100);
+//
+//        JScrollPane scrollPane = new JScrollPane(jTable1);
+//        scrollPane.setBounds(350, 20, 400, 350);
+//        add(scrollPane);
+        
+    DefaultTableModel tb = new DefaultTableModel();
+    // Memberi nama pada setiap kolom tabel
+    tb.addColumn("NPM");
+    tb.addColumn("Nama");
+    tb.addColumn("Jenis Kelamin");
+    tb.addColumn("Jurusan");
+    tb.addColumn("Kelas");
+    tb.addColumn("Image");
+    
+    jTable1.setModel(tb);
+    try (Connection con = DatabaseConnection.getConnection()) {
+            String query = "SELECT * FROM mahasiswa";
+            PreparedStatement pst = con.prepareStatement(query);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()) {
+                String name = rs.getString("nama");
+                String npm = rs.getString("npm");
+                String gender = rs.getString("jenis_kelamin");
+                String prodi = rs.getString("prodi");
+                String kelas = rs.getString("kelas");
+                byte[] photoBytes = rs.getBytes("image");
+                ImageIcon icon = new ImageIcon(new ImageIcon(photoBytes).getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH));
+
+                tb.addRow(new Object[]{name, npm, gender, prodi, kelas, icon});
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+//    try {
+//          Connection conn = DatabaseConnection.getConnection();    //memanggil koneksi yang terdapat pada class konfigurasi
+//            java.sql.Statement pstmt = conn.createStatement();
+//            java.sql.ResultSet rs;   // interface untuk menampung data hasil query.
+//        System.out.println("Database ditemukan");
+//        pstmt = conn.createStatement();    // Membuat objek statement
+//        // Mengambil data dari database
+//         rs = pstmt.executeQuery("select * from mahasiswa"); // eksekusi query dan simpan hasilnya di obj ResultSet
+//        
+//        while (rs.next())
+//        {
+//            // Mengambil data dari database berdasarkan nama kolom pada tabel
+//            // Lalu di tampilkan ke dalam JTable
+//            tb.addRow(new Object[] {
+//                //getString digunakan untuk mengambil kolom dengan tipe data string. 
+//                rs.getString (3),   
+//                rs.getString (2),
+//                rs.getString (4),
+//                rs.getString (5),
+//                rs.getString (6),
+//                rs.getBytes (7),
+//            });
+//        }
+//    }catch ( SQLException e){
+//            JOptionPane.showMessageDialog(this, e.getMessage());
+//        }
+    }
+    
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        cmbProdi = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
+        txtNama = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        txtNPM = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        cmbKelas = new javax.swing.JComboBox<>();
+        jLabel11 = new javax.swing.JLabel();
+        cmbJenisKelamin = new javax.swing.JComboBox<>();
+        btnSimpan = new javax.swing.JButton();
+        btnEdit = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        btnExit = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        btnTelusuri = new javax.swing.JButton();
+        btnSimpan1 = new javax.swing.JButton();
+        btnLoad = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txtPath = new javax.swing.JTextArea();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        lblImage = new javax.swing.JLabel();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(41, 209, 86));
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel1.setText("DATA MAHASISWA");
+
+        jLabel9.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        jLabel9.setText("Program Studi");
+
+        cmbProdi.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Arsitektur", "Teknik Informatika", "Teknik Elektro", "Teknik Sipil", "Teknik Industri" }));
+        cmbProdi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbProdiActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        jLabel2.setText("Nama Lengkap");
+
+        txtNama.setFont(new java.awt.Font("Times New Roman", 0, 11)); // NOI18N
+        txtNama.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNamaActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        jLabel4.setText("NPM");
+
+        txtNPM.setFont(new java.awt.Font("Times New Roman", 0, 11)); // NOI18N
+        txtNPM.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNPMActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        jLabel8.setText("Kelas");
+
+        cmbKelas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "A1", "A2", "B", "C" }));
+        cmbKelas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbKelasActionPerformed(evt);
+            }
+        });
+
+        jLabel11.setFont(new java.awt.Font("Poppins", 0, 12)); // NOI18N
+        jLabel11.setText("Jenis Kelamin");
+
+        cmbJenisKelamin.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Laki-laki", "Perempuan" }));
+        cmbJenisKelamin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbJenisKelaminActionPerformed(evt);
+            }
+        });
+
+        btnSimpan.setBackground(new java.awt.Color(0, 102, 255));
+        btnSimpan.setFont(new java.awt.Font("Poppins SemiBold", 0, 12)); // NOI18N
+        btnSimpan.setForeground(new java.awt.Color(255, 255, 255));
+        btnSimpan.setText("SAVE");
+        btnSimpan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSimpanActionPerformed(evt);
+            }
+        });
+
+        btnEdit.setBackground(new java.awt.Color(204, 0, 204));
+        btnEdit.setFont(new java.awt.Font("Poppins SemiBold", 0, 12)); // NOI18N
+        btnEdit.setForeground(new java.awt.Color(255, 255, 255));
+        btnEdit.setText("UPDATE");
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setBackground(new java.awt.Color(255, 0, 51));
+        btnDelete.setFont(new java.awt.Font("Poppins SemiBold", 0, 12)); // NOI18N
+        btnDelete.setForeground(new java.awt.Color(255, 255, 255));
+        btnDelete.setText("DELETE");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        btnExit.setBackground(new java.awt.Color(255, 153, 0));
+        btnExit.setFont(new java.awt.Font("Poppins SemiBold", 0, 12)); // NOI18N
+        btnExit.setForeground(new java.awt.Color(255, 255, 255));
+        btnExit.setText("CANCEL");
+        btnExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExitActionPerformed(evt);
+            }
+        });
+
+        jTable1.setBackground(new java.awt.Color(35, 35, 35));
+        jTable1.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        jTable1.setForeground(new java.awt.Color(255, 255, 255));
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
+
+        btnTelusuri.setText("Telusuri");
+        btnTelusuri.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTelusuriActionPerformed(evt);
+            }
+        });
+
+        btnSimpan1.setText("Simpan");
+        btnSimpan1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSimpan1ActionPerformed(evt);
+            }
+        });
+
+        btnLoad.setText("Muat");
+        btnLoad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoadActionPerformed(evt);
+            }
+        });
+
+        txtPath.setEditable(false);
+        txtPath.setColumns(20);
+        txtPath.setLineWrap(true);
+        txtPath.setRows(5);
+        txtPath.setWrapStyleWord(true);
+        jScrollPane2.setViewportView(txtPath);
+
+        jLabel10.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setText("Path : ");
+
+        jLabel5.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("Image : ");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(247, 247, 247)
+                        .addComponent(jLabel1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 603, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnSimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(48, 48, 48)
+                                .addComponent(btnEdit)
+                                .addGap(41, 41, 41)
+                                .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(28, 28, 28)
+                                .addComponent(btnExit))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(42, 42, 42)
+                                .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, 457, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel9)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel11))
+                                .addGap(48, 48, 48)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(cmbProdi, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(txtNPM)
+                                    .addComponent(cmbJenisKelamin, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cmbKelas, javax.swing.GroupLayout.PREFERRED_SIZE, 457, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(58, 58, 58)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel5)
+                                        .addGap(107, 107, 107))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel10)
+                                        .addGap(151, 151, 151))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 252, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(btnTelusuri)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(btnSimpan1)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(btnLoad)))
+                                        .addGap(29, 29, 29)))))))
+                .addGap(41, 41, 41))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblImage, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnSimpan1)
+                            .addComponent(btnLoad)
+                            .addComponent(btnTelusuri))
+                        .addGap(24, 24, 24)
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane2))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(66, 66, 66)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(txtNama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(txtNPM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(cmbKelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel11)
+                            .addComponent(cmbJenisKelamin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9)
+                            .addComponent(cmbProdi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(66, 66, 66)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(btnSimpan)
+                                .addComponent(btnExit)
+                                .addComponent(btnDelete))
+                            .addComponent(btnEdit))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 368, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(25, 25, 25))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void cmbProdiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbProdiActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbProdiActionPerformed
+
+    private void txtNamaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNamaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNamaActionPerformed
+
+    private void txtNPMActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNPMActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNPMActionPerformed
+
+    private void cmbKelasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbKelasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbKelasActionPerformed
+
+    private void cmbJenisKelaminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbJenisKelaminActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbJenisKelaminActionPerformed
+
+    private void btnSimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpanActionPerformed
+        try {
+            String name = txtNama.getText();
+            String NPM = new String(txtNPM.getText());
+            String jk = cmbJenisKelamin.getSelectedItem().toString();
+            String prodi = cmbProdi.getSelectedItem().toString();
+            String kelas = cmbKelas.getSelectedItem().toString();
+            String path = txtPath.getText();
+
+            pst = con.prepareStatement("INSERT INTO mahasiswa(nama, npm, jenis_kelamin, prodi, kelas, image, imagePath) VALUES(?,?,?,?,?,?,?)");
+            pst.setString(1, name);
+            pst.setString(2, NPM);
+            pst.setString(3, jk);
+            pst.setString(4, prodi);
+            pst.setString(5, kelas);
+            pst.setBytes(6, user_image);
+            pst.setString(6, path);
+
+            int k = pst.executeUpdate();
+
+            if (k == 1) {
+                JOptionPane.showMessageDialog(this, "Record Added Successfully");
+                txtNama.setText("");
+                txtNPM.setText("");
+                cmbJenisKelamin.setSelectedIndex(-1);
+                cmbProdi.setSelectedIndex(-1);
+                cmbKelas.setSelectedIndex(-1);
+                lblImage.setIcon(null);
+                txtPath.setText("");
+            } else {
+                JOptionPane.showMessageDialog(this, "Record Failed to Save");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MainMahasiswaForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_btnSimpanActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        try(Connection conn = DatabaseConnection.getConnection()) {
+            String sql = "INSERT INTO mahasiswa (nama, npm, jenis_kelamin, prodi, kelas) VALUES('"
+            +txtNama.getText()+"','"
+            +txtNPM.getText()+"','"
+            +cmbJenisKelamin.getSelectedItem()+"','"
+            +cmbProdi.getSelectedItem()+"','"
+            +cmbKelas.getSelectedItem()+"')";
+
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.execute();
+
+            JOptionPane.showMessageDialog(null, "Berhasil Ddisimpan");
+//            Fetch();
+        } catch (Exception e) {
+
+        }
+    }//GEN-LAST:event_btnEditActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        try(Connection conn = DatabaseConnection.getConnection()){
+
+            String sql = "delete from mahasiswa where npm='"+txtNPM.getText()+"' ";
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.executeUpdate(); JOptionPane.showMessageDialog(null,"Data berhasil di hapus");
+//            Fetch();
+        }
+        catch (Exception e){
+            JOptionPane.showMessageDialog(null,"Proses Penghapusan Gagal");
+            System.out.println(e.getMessage());
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnExitActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+        txtNPM.setText(jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString());
+        txtNama.setText(jTable1.getValueAt(jTable1.getSelectedRow(), 1).toString());
+        cmbJenisKelamin.setSelectedItem(jTable1.getValueAt(jTable1.getSelectedRow(), 2).toString());
+        cmbProdi.setSelectedItem(jTable1.getValueAt(jTable1.getSelectedRow(), 3).toString());
+        cmbKelas.setSelectedItem(jTable1.getValueAt(jTable1.getSelectedRow(), 4).toString());
+        btnSimpan.setEnabled(false);
+        btnEdit.setEnabled(true);
+        btnExit.setEnabled(true);
+        btnDelete.setEnabled(true);
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void btnTelusuriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTelusuriActionPerformed
+        // TODO add your handling code here:
+        chooseImage();
+    }//GEN-LAST:event_btnTelusuriActionPerformed
+
+    private void btnSimpan1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSimpan1ActionPerformed
+        // TODO add your handling code here:
+        saveImage();
+    }//GEN-LAST:event_btnSimpan1ActionPerformed
+
+    private void btnLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnLoadActionPerformed
+private void Fetch(){
+        try {
+            int g;
+            pst = con.prepareStatement("SELECT * FROM mahasiswa");
+            rs = pst.executeQuery();
+            ResultSetMetaData rss = rs.getMetaData();
+            g = rss.getColumnCount();
+            
+            DefaultTableModel df = (DefaultTableModel)jTable1.getModel();
+            df.setRowCount(0);
+            while(rs.next()){
+                Vector v2 = new Vector();
+                for(int a=1; a<=g; a++){
+                    v2.add(rs.getString("npm"));
+                    v2.add(rs.getString("nama"));
+                    v2.add(rs.getString("jenis_kelamin"));
+                    v2.add(rs.getString("prodi"));
+                    v2.add(rs.getString("kelas"));
+                }
+                df.addRow(v2);
+            }
+                    } catch (SQLException ex) {
+            Logger.getLogger(MainMahasiswaForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void chooseImage() {
+        
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes()));
+        File file = fileChooser.getSelectedFile();
+        
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            selectedFile = fileChooser.getSelectedFile();
+            txtPath.setText(selectedFile.getAbsolutePath());
+            
+            if (file != null) {
+            
+            
+            try {
+                FileInputStream fis = new FileInputStream(file);
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                byte[] buf = new byte[1024];
+                for (int readNum; (readNum = fis.read(buf)) != -1;) {
+                    bos.write(buf, 0, readNum);
+                }
+                user_image = bos.toByteArray();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+            try {
+                Image img = ImageIO.read(selectedFile);
+                Image scaledImg = img.getScaledInstance(lblImage.getWidth(), lblImage.getHeight(), Image.SCALE_SMOOTH);
+                lblImage.setIcon(new ImageIcon(scaledImg));
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+    
+    private void saveImage() {
+        if (selectedFile == null) {
+            JOptionPane.showMessageDialog(this, "No image selected!");
+            return;
+        }
+
+        try (FileInputStream fis = new FileInputStream(selectedFile)) {
+            String query = "INSERT INTO images (image, imagePath) VALUES (?, ?)";
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pst = conn.prepareStatement(query);
+            pst.setString(2, selectedFile.getAbsolutePath());
+            pst.setBinaryStream(1, fis, (int) selectedFile.length());
+
+            int rowAffected = pst.executeUpdate();
+            if (rowAffected > 0) {
+                JOptionPane.showMessageDialog(this, "Image saved successfully!");
+            }
+        } catch (SQLException | FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void loadData() {
+//        try (Connection con = DatabaseConnection.getConnection()) {
+//            String query = "SELECT * FROM mahasiswa";
+//            PreparedStatement pst = con.prepareStatement(query);
+//            ResultSet rs = pst.executeQuery();
+//            while (rs.next()) {
+//                String name = rs.getString("nama");
+//                String npm = rs.getString("npm");
+//                String gender = rs.getString("jenis_kelamin");
+//                String prodi = rs.getString("prodi");
+//                String kelas = rs.getString("kelas");
+//                byte[] photoBytes = rs.getBytes("image");
+//                ImageIcon icon = new ImageIcon(new ImageIcon(photoBytes).getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH));
+//
+////                tableModel.addRow(new Object[]{name, npm, gender, prodi, kelas, icon});
+//            }
+//        } catch (SQLException ex) {
+//            ex.printStackTrace();
+//        }
+    }
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(MainMahasiswaForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(MainMahasiswaForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(MainMahasiswaForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(MainMahasiswaForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new MainMahasiswaForm().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnEdit;
+    private javax.swing.JButton btnExit;
+    private javax.swing.JButton btnLoad;
+    private javax.swing.JButton btnSimpan;
+    private javax.swing.JButton btnSimpan1;
+    private javax.swing.JButton btnTelusuri;
+    private javax.swing.JComboBox<String> cmbJenisKelamin;
+    private javax.swing.JComboBox<String> cmbKelas;
+    private javax.swing.JComboBox<String> cmbProdi;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lblImage;
+    private javax.swing.JTextField txtNPM;
+    private javax.swing.JTextField txtNama;
+    private javax.swing.JTextArea txtPath;
+    // End of variables declaration//GEN-END:variables
+}
