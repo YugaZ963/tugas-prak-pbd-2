@@ -1,0 +1,391 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package uas_pbd_yuga_057;
+import java.awt.Image;
+import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.DriverManager;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+public class MainFrame057 extends javax.swing.JFrame {
+
+    /**
+     * Creates new form UAS_Prak_PBD_Yuga_057_Form
+     */
+    public MainFrame057() {
+        initComponents();
+        Fetch();
+        customizeTable();
+        loadUserData();
+        setLocationRelativeTo(null);
+        setIconImage(new ImageIcon(getClass().getResource("/uas_pbd_yuga_057/images/logo.jpeg")).getImage());
+    }
+    Connection con; // Deklarasi variabel untuk koneksi database
+    PreparedStatement pst; // Deklarasi variabel untuk statement SQL
+    ResultSet rs; // Deklarasi variabel untuk hasil kueri SQL
+    
+    private void loadUserData() {
+        int userId = UserSession.userId;
+        
+        // Lakukan sesuatu dengan userId, misalnya menampilkan informasi pengguna
+        lblUserId.setText("User : " + userId);
+    }
+    
+    private void Fetch() { // Deklarasi method Fetch.
+    try { // Mulai blok try untuk menangani eksekusi yang mungkin menghasilkan kesalahan.
+        int g; // Deklarasi variabel g untuk menyimpan jumlah kolom dari ResultSet.
+        
+        // Membuat koneksi ke database
+        con = (Connection) Config.configDB();
+        
+        // Membuat statement SQL untuk mengambil semua data dari tabel 'product'
+        pst = con.prepareStatement("SELECT * FROM product");
+        
+        // Mengeksekusi query dan menyimpan hasilnya dalam ResultSet
+        rs = pst.executeQuery();
+        
+        // Mendapatkan metadata dari ResultSet untuk mengetahui jumlah kolom
+        ResultSetMetaData rss = rs.getMetaData();
+        g = rss.getColumnCount();
+        
+        // Mengambil model dari jTable1 dan mengosongkan data yang ada
+        DefaultTableModel df = (DefaultTableModel) jTable1.getModel();
+        df.setRowCount(0);
+        
+        // Looping melalui setiap baris hasil query
+        while (rs.next()) {
+            // Membuat vector untuk menyimpan data setiap baris
+            Vector v2 = new Vector();
+            
+            // Looping melalui setiap kolom dalam baris
+            for (int a = 1; a <= g; a++) {
+                // Menambahkan nilai dari setiap kolom ke dalam vector
+                v2.add(rs.getString("id")); // Menambahkan nilai kolom 'id'
+                v2.add(rs.getString("name")); // Menambahkan nilai kolom 'name'
+                v2.add(rs.getString("size")); // Menambahkan nilai kolom 'size'
+                v2.add(rs.getString("price")); // Menambahkan nilai kolom 'price'
+                v2.add(rs.getString("qty")); // Menambahkan nilai kolom 'qty'
+                
+                // Mengambil data gambar dari kolom 'image'
+                byte[] imgBytes = rs.getBytes("image");
+                
+                // Memeriksa apakah ada gambar yang diambil
+                if (imgBytes != null) {
+                    // Membuat ImageIcon dari byte array gambar
+                    ImageIcon imageIcon = new ImageIcon(imgBytes);
+                    
+                    // Mengatur ukuran gambar
+                    Image scaledImage = imageIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+                    
+                    // Menambahkan gambar yang telah diatur ukurannya ke dalam vector
+                    v2.add(new ImageIcon(scaledImage));
+                } else {
+                    // Jika tidak ada gambar, tambahkan nilai null ke dalam vector
+                    v2.add(null);
+                }
+            }
+            
+            // Menambahkan vector yang mewakili baris ke model tabel
+            df.addRow(v2);
+        }
+    } catch (SQLException ex) {
+        // Menangani kesalahan SQL dan mencatat pesan kesalahan
+        Logger.getLogger(Product2.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (Exception ex) {
+        // Menangani kesalahan umum dan mencatat pesan kesalahan
+        Logger.getLogger(Product2.class.getName()).log(Level.SEVERE, null, ex);
+    }
+}
+
+    
+    private void customizeTable() {
+        // Pastikan bahwa kolom ke-6 adalah kolom untuk gambar
+        jTable1.getColumnModel().getColumn(5).setCellRenderer(new ImageRenderer());
+        jTable1.setRowHeight(100); // set tinggi baris sesuai ukuran gambar
+    }
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel1 = new javax.swing.JPanel();
+        lblUserId = new javax.swing.JLabel();
+        Title = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        Welcomee = new javax.swing.JLabel();
+        Welcome1 = new javax.swing.JLabel();
+        Background = new javax.swing.JLabel();
+        menuBar = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("RAVAZKA Shop");
+
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblUserId.setBackground(new java.awt.Color(255, 255, 255));
+        lblUserId.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblUserId.setText("User : ");
+        lblUserId.setOpaque(true);
+        jPanel1.add(lblUserId, new org.netbeans.lib.awtextra.AbsoluteConstraints(1270, 10, -1, -1));
+
+        Title.setBackground(new java.awt.Color(255, 255, 255));
+        Title.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        Title.setText("Selamat Datang di Toko RAFIFAL");
+        Title.setOpaque(true);
+        jPanel1.add(Title, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 20, -1, -1));
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "ID", "Product Name", "Size", "Price", "Quantity", "Image"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable1.setEditingColumn(0);
+        jTable1.setEditingRow(0);
+        jScrollPane1.setViewportView(jTable1);
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 360, 1330, 390));
+
+        Welcomee.setBackground(new java.awt.Color(255, 255, 255));
+        Welcomee.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        Welcomee.setText("List - list Produk dari Toko RAVAZKA");
+        Welcomee.setOpaque(true);
+        jPanel1.add(Welcomee, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 320, -1, -1));
+
+        Welcome1.setBackground(new java.awt.Color(255, 255, 255));
+        Welcome1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        Welcome1.setText("Temukan Seragam Sekolah Berkualitas Tinggi dengan Harga Terjangkau di Sini!");
+        Welcome1.setOpaque(true);
+        jPanel1.add(Welcome1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 70, -1, -1));
+
+        Background.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uas_pbd_yuga_057/images/gambarToko-1.jpg"))); // NOI18N
+        jPanel1.add(Background, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+
+        menuBar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        jMenu1.setText("Home ");
+        jMenu1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu1ActionPerformed(evt);
+            }
+        });
+
+        jMenuItem1.setText("Home");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        menuBar.add(jMenu1);
+
+        jMenu2.setText("Transaction");
+
+        jMenuItem2.setText("Buy");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem2);
+
+        jMenuItem4.setText("Top Up");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem4);
+
+        menuBar.add(jMenu2);
+
+        jMenu3.setText("Account");
+
+        jMenuItem5.setText("Profile");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem5);
+
+        jMenuItem3.setText("Log out");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem3);
+
+        menuBar.add(jMenu3);
+
+        setJMenuBar(menuBar);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jMenu1ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        // Buat instance dari MainFrame057
+        MainFrame057 mainFrame = new MainFrame057();
+
+        // Tampilkan frame 
+        mainFrame.setVisible(true);
+
+        // Tutup MainFrame
+        this.dispose();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+            // TODO add your handling code here:
+            // Buat instance dari TransactionForm
+            TransactionForm transaction = new TransactionForm();
+
+            // Tampilkan frame
+            transaction.setVisible(true);
+
+            // Tutup MainFrame
+            this.dispose();
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        UserSession.userId = 0;
+    
+        // Buka kembali form login
+        // Buat instance dari LoginForm
+        LoginForm loginFrame = new LoginForm();
+        
+        // Tampilkan frame
+        loginFrame.setVisible(true);
+        
+        // Menutup form utama
+        this.dispose(); 
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        // Buat instance dari TopUpDialog
+        TopUpDialog topUpForm = new TopUpDialog(this, true);
+        
+        // Tampilkan dialog
+        topUpForm.setVisible(true);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        // TODO add your handling code here:
+        // Buat instance dari TopUpDialog
+        AccountProfileDialog accountProfileDialog = new AccountProfileDialog(this, true);
+        
+        // Tampilkan dialog
+        accountProfileDialog.setVisible(true);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(MainFrame057.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(MainFrame057.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(MainFrame057.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(MainFrame057.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new MainFrame057().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Background;
+    private javax.swing.JLabel Title;
+    private javax.swing.JLabel Welcome1;
+    private javax.swing.JLabel Welcomee;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lblUserId;
+    private javax.swing.JMenuBar menuBar;
+    // End of variables declaration//GEN-END:variables
+}
